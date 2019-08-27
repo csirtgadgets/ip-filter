@@ -18,9 +18,8 @@ PERM_WHITELIST = [
 # https://github.com/jsommers/pytricia
 def process(data=[], whitelist=[]):
     wl = pytricia.PyTricia()
-    for x in PERM_WHITELIST:
-        wl[x] = True
-        
+
+    whitelist += PERM_WHITELIST
     [wl[i] = True for i in whitelist]
 
     for i in data:
