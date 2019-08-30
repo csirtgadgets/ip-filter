@@ -1,9 +1,13 @@
+#!/usr/bin/env python
 
+# https://www.mozilla.org/en-US/MPL/2.0/
+
+# https://github.com/jsommers/pytricia
 # pip install pytricia
 
 import pytricia
 
-PERM_WHITELIST = [
+WHITELIST = [
     "0.0.0.0/8",
     "10.0.0.0/8",
     "127.0.0.0/8",
@@ -15,13 +19,32 @@ PERM_WHITELIST = [
     "248.0.0.0/5",
 ]
 
-# https://github.com/jsommers/pytricia
-def process(data=[], whitelist=[]):
-    wl = pytricia.PyTricia()
+WL = pytricia.PyTricia()
+for i in WHITELIST:
+    WL[i] = True
 
-    whitelist += PERM_WHITELIST
-    [wl[i] = True for i in whitelist]
 
-    for i in data:
-        if i not in wl:
-            yield i
+def is_whitelisted(ip):
+    if ip in WL:
+        return True
+
+# EXAMPLES
+# python3 filter.py 192.168.1.0/24
+# python3 filter.py 192.168.1.1
+# python3 filter.py 1.1.1.1
+
+
+def main():
+    import sys
+
+    ip = sys.argv[1]
+
+    if is_whitelisted(ip):
+        print("Whitelisted!")
+
+    else:
+        print("Not Whitelisted!")
+
+
+if __name__ == '__main__':
+    main()
